@@ -74,7 +74,7 @@ const ChatWidget = () => {
       const data = new FormData();
       data.append("visitor_id", saasmonkChatAnonymousID);
       data.append("page_title", document.title);
-      navigator.sendBeacon(process.env.VITE_API_URL + "/api/visitor/add", data);
+      navigator.sendBeacon("https://saasmonk-test-chat.vercel.app/api/visitor/add", data);
     }
   };
 
