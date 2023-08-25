@@ -55,7 +55,31 @@ const ChatWidget = () => {
   // controlled input value
   const conversationId = useRef<string>("");
 
+  const sendAnalytics = () => {
+    if (navigator.sendBeacon) {
+      let saasmonkChatAnonymousID = "";
+      if (localStorage.getItem("saasmonkChatAnonymousID")) {
+        saasmonkChatAnonymousID = localStorage.getItem(
+          "saasmonkChatAnonymousID"
+        ) ?? "";
+      } else {
+        saasmonkChatAnonymousID = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+        localStorage.setItem(
+          "saasmonkChatAnonymousID",
+          saasmonkChatAnonymousID
+        );
+      }
+
+      // Sending data to server
+      const data = new FormData();
+      data.append("visitor_id", saasmonkChatAnonymousID);
+      data.append("page_title", document.title);
+      navigator.sendBeacon(process.env.VITE_API_URL + "api/visitor/add", data);
+    }
+  };
+
   useEffect(() => {
+    sendAnalytics();
     const messageInsertChangesChannel = supabaseClient.channel(
       "message-insert-changes"
     );
